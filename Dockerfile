@@ -16,6 +16,9 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 WORKDIR aqmswatcher
 COPY setup.py .
 COPY setup.cfg .

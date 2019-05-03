@@ -20,4 +20,4 @@ import tomputils.util as tutil
 
 logger = tutil.setup_logging("aqmswatcher errors")
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
