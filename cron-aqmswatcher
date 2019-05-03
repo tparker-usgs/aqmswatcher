@@ -1,0 +1,2 @@
+# check comcat for missing or extra events
+0 0 * * * check_comcat
