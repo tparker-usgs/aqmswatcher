@@ -9,8 +9,7 @@ from aqmswatcher import logger
 COMCAT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query.geojson"
 AQMS_URL = "https://avo.alaska.edu/admin/catalog/catalogResults.php"
 LOOKBACK = 30
-# CERT = tutil.get_env_var("CERT", None)
-CERT = False
+CERT = "/app/aqmswatcher/DOIRootCA.crt"
 
 
 def get_comcat_events():
@@ -34,7 +33,6 @@ def get_comcat_events():
 
 def get_aqms_events():
     logger.debug("Requesting AQMS events")
-    cert = tutil.get_env_var("CERT", None)
     end_time = datetime.now()
     start_time = end_time - timedelta(days=LOOKBACK)
     aqms_args = {'from': start_time.strftime("%Y/%m/%d"),

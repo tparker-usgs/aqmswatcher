@@ -20,6 +20,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /app/aqmswatcher
+COPY DOIRootCA.crt .
 COPY setup.py .
 COPY setup.cfg .
 COPY aqmswatcher aqmswatcher
