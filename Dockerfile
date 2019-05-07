@@ -19,7 +19,7 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR aqmswatcher
+WORKDIR /app/aqmswatcher
 COPY setup.py .
 COPY setup.cfg .
 COPY aqmswatcher aqmswatcher
