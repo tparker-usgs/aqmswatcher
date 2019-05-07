@@ -25,5 +25,6 @@ COPY setup.cfg .
 COPY aqmswatcher aqmswatcher
 RUN python setup.py install
 
+COPY cron-aqmswatcher .
 RUN pip freeze > requirements.txt
 CMD ["/usr/local/bin/supercronic", "/app/aqmswatcher/cron-aqmswatcher"]

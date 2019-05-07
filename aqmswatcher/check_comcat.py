@@ -10,7 +10,7 @@ COMCAT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query.geojson"
 AQMS_URL = "https://avo.alaska.edu/admin/catalog/catalogResults.php"
 LOOKBACK = 30
 # CERT = tutil.get_env_var("CERT", None)
-CERT = None
+CERT = False
 
 
 def get_comcat_events():
