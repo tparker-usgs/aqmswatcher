@@ -1,3 +1,0 @@
-[console_scripts]
-check_comcat = aqmswatcher.check_comcat:main
-
