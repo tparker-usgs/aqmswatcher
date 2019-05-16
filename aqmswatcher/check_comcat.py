@@ -19,7 +19,7 @@ def get_comcat_events():
     comcat_args = {'starttime': start_time.isoformat(),
                    'endtime': end_time.isoformat(),
                    'catalog': 'av',
-                   'minmagnitude': -1}
+                   }
     r = requests.get(COMCAT_URL, params=comcat_args, verify=CERT)
     comcat_events = geojson.loads(r.content)
     evids = []
