@@ -35,8 +35,8 @@ def get_aqms_events():
     logger.debug("Requesting AQMS events")
     end_time = datetime.now()
     start_time = end_time - timedelta(days=LOOKBACK)
-    aqms_args = {'from': start_time.strftime("%Y/%m/%d"),
-                 'to': end_time.strftime("%Y/%m/%d"),
+    aqms_args = {'from': start_time.strftime("%Y/%m/%d/%H:%M:%S"),
+                 'to': end_time.strftime("%Y/%m/%d/%H:%M:%S"),
                  'review': "F",
                  'format': "summary",
                  'selectFlag': "selected",
