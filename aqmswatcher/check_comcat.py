@@ -16,15 +16,16 @@ def get_comcat_events():
     logger.debug("Requesting ComCat events")
     end_time = datetime.now()
     start_time = end_time - timedelta(days=LOOKBACK)
-    comcat_args = {'starttime': start_time.isoformat(),
-                   'endtime': end_time.isoformat(),
-                   'catalog': 'av',
-                   }
+    comcat_args = {
+        "starttime": start_time.isoformat(),
+        "endtime": end_time.isoformat(),
+        "catalog": "av",
+    }
     r = requests.get(COMCAT_URL, params=comcat_args, verify=CERT)
     comcat_events = geojson.loads(r.content)
     evids = []
-    for event in comcat_events['features']:
-        ids = event['properties']['ids'].split(",")
+    for event in comcat_events["features"]:
+        ids = event["properties"]["ids"].split(",")
         for id in ids:
             if id.startswith("av"):
                 evids.append(id[2:].rstrip(","))
@@ -35,13 +36,14 @@ def get_aqms_events():
     logger.debug("Requesting AQMS events")
     end_time = datetime.now()
     start_time = end_time - timedelta(days=LOOKBACK)
-    aqms_args = {'from': start_time.strftime("%Y/%m/%d/%H:%M:%S"),
-                 'to': end_time.strftime("%Y/%m/%d/%H:%M:%S"),
-                 'review': "F",
-                 'format': "summary",
-                 'selectFlag': "selected",
-                 'result': "display"
-                 }
+    aqms_args = {
+        "from": start_time.strftime("%Y/%m/%d/%H:%M:%S"),
+        "to": end_time.strftime("%Y/%m/%d/%H:%M:%S"),
+        "review": "F",
+        "format": "summary",
+        "selectFlag": "selected",
+        "result": "display",
+    }
     response = requests.get(AQMS_URL, params=aqms_args, verify=CERT)
     evids = []
     for event in response.text.splitlines()[2:]:
@@ -53,9 +55,9 @@ def get_aqms_events():
 
 
 def report_error(missing, extra):
-    mailhost = tutil.get_env_var('MAILHOST')
-    sender = tutil.get_env_var('SENDER')
-    recipients = tutil.get_env_var('RECIPIENTS')
+    mailhost = tutil.get_env_var("MAILHOST")
+    sender = tutil.get_env_var("SENDER")
+    recipients = tutil.get_env_var("RECIPIENTS")
 
     message = "From: {}\nTo: {}\nSubject: AQMS ComCat error\n\n"
     message = message.format(sender, recipients)
@@ -75,7 +77,7 @@ def report_error(missing, extra):
 
     try:
         smtpObj = smtplib.SMTP(mailhost)
-        smtpObj.sendmail(sender, recipients.split(','), message)
+        smtpObj.sendmail(sender, recipients.split(","), message)
     except smtplib.SMTPException:
         pass
 
@@ -91,5 +93,5 @@ def main():
         report_error(missing, extra)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
