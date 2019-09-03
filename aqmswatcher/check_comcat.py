@@ -9,8 +9,7 @@ from aqmswatcher import logger
 COMCAT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query.geojson"
 AQMS_URL = "https://avo.alaska.edu/admin/catalog/catalogResults.php"
 LOOKBACK = 30
-# CERT = "/app/aqmswatcher/DOIRootCA.crt"
-CERT = "/Users/tparker/certs/DOIRootCA.crt"
+CERT = "/app/aqmswatcher/DOIRootCA.crt"
 
 
 def get_comcat_events():
