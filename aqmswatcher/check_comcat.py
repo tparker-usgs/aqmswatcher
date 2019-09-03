@@ -9,7 +9,8 @@ from aqmswatcher import logger
 COMCAT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query.geojson"
 AQMS_URL = "https://avo.alaska.edu/admin/catalog/catalogResults.php"
 LOOKBACK = 30
-CERT = "/app/aqmswatcher/DOIRootCA.crt"
+# CERT = "/app/aqmswatcher/DOIRootCA.crt"
+CERT = "/Users/tparker/certs/DOIRootCA.crt"
 
 
 def get_comcat_events():
@@ -33,6 +34,8 @@ def get_comcat_events():
 
 
 def get_aqms_events():
+    avouser = tutil.get_env_var("AVOUSER")
+    avopass = tutil.get_env_var("AVOPASS")
     logger.debug("Requesting AQMS events")
     end_time = datetime.now()
     start_time = end_time - timedelta(days=LOOKBACK)
@@ -44,20 +47,23 @@ def get_aqms_events():
         "selectFlag": "selected",
         "result": "display",
     }
-    response = requests.get(AQMS_URL, params=aqms_args, verify=CERT)
+    response = requests.get(
+        AQMS_URL, params=aqms_args, verify=CERT, auth=(avouser, avopass)
+    )
     evids = []
     for event in response.text.splitlines()[2:]:
-        parts = event.split()
-        if len(parts) < 14:
-            continue
-        evids.append(parts[13])
+        evid = event[100:108]
+        if evid.isdigit():
+            evids.append(evid)
+        else:
+            print("NOT EVENT: " + evid)
     return evids
 
 
 def report_error(missing, extra):
-    mailhost = tutil.get_env_var("MAILHOST")
-    sender = tutil.get_env_var("SENDER")
-    recipients = tutil.get_env_var("RECIPIENTS")
+    mailhost = tutil.get_env_var("MAILHOST", "NULL")
+    sender = tutil.get_env_var("SENDER", "NULL")
+    recipients = tutil.get_env_var("RECIPIENTS", "NULL")
 
     message = "From: {}\nTo: {}\nSubject: AQMS ComCat error\n\n"
     message = message.format(sender, recipients)
@@ -75,11 +81,14 @@ def report_error(missing, extra):
             message += "\t{}\n".format(evid)
         message += "\n"
 
-    try:
-        smtpObj = smtplib.SMTP(mailhost)
-        smtpObj.sendmail(sender, recipients.split(","), message)
-    except smtplib.SMTPException:
-        pass
+    if mailhost != "NULL":
+        try:
+            smtpObj = smtplib.SMTP(mailhost)
+            smtpObj.sendmail(sender, recipients.split(","), message)
+        except smtplib.SMTPException:
+            pass
+    else:
+        print(message)
 
 
 def main():
