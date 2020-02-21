@@ -21,8 +21,14 @@ def get_comcat_events():
         "endtime": end_time.isoformat(),
         "catalog": "av",
     }
-    r = requests.get(COMCAT_URL, params=comcat_args, verify=CERT)
-    comcat_events = geojson.loads(r.content)
+    response = None
+    try:
+        response = requests.get(COMCAT_URL, params=comcat_args, verify=CERT)
+    except requests.exceptions.SSLError:
+        response = requests.get(
+            COMCAT_URL, params=comcat_args
+        )
+    comcat_events = geojson.loads(response.content)
     evids = []
     for event in comcat_events["features"]:
         ids = event["properties"]["ids"].split(",")
