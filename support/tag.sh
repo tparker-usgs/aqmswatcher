@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=`python -c "import aqmswatcher; print(aqmswatcher.__version__)"`
+VERSION=`python3 -c "import aqmswatcher; print(aqmswatcher.__version__)"`
 echo Tagging release $VERSION
 git add aqmswatcher/__init__.py
 git commit -m 'version bump'
