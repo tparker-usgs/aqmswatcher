@@ -46,9 +46,16 @@ def get_aqms_events():
         "selectFlag": "selected",
         "result": "display",
     }
-    response = requests.get(
-        AQMS_URL, params=aqms_args, verify=CERT, auth=(avouser, avopass)
-    )
+
+    response = None
+    try:
+        response = requests.get(
+            AQMS_URL, params=aqms_args, verify=CERT, auth=(avouser, avopass)
+        )
+    except requests.exceptions.SSLError:
+        response = requests.get(
+            AQMS_URL, params=aqms_args, auth=(avouser, avopass)
+        )
     evids = []
     for event in response.text.splitlines()[2:]:
         evid = event[100:108]
